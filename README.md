@@ -1,0 +1,32 @@
+# irg
+R Package for Granger-Causal Analysis of Irregularly Sampled Signals
+
+For users who are interested in having the latest developments, the
+GitHub version is ideal although more dependencies are required to run a
+stable version of the package. Most importantly, users **must** have a
+(C++) compiler installed on their machine that is compatible with R
+(e.g. Clang).
+
+``` r
+# Install dependencies
+install.packages(c("RcppArmadillo","devtools","knitr","rmarkdown"))
+
+# Install the package from GitHub without Vignettes/User Guides
+devtools::install_github("SMAC-Group/irg")
+
+# Install the package with Vignettes/User Guides 
+devtools::install_github("SMAC-Group/irg", build_vignettes = TRUE)
+```
+
+*The setup to obtain the development version of `irg` is platform
+dependent.*
+
+## License
+
+The license this source code is released under is the GNU AFFERO GENERAL
+PUBLIC LICENSE (AGPL) v3.0. Please see the LICENSE file for full text.
+Otherwise, please consult [TLDR
+Legal](https://tldrlegal.com/license/gnu-affero-general-public-license-v3-\(agpl-3.0\))
+or [GNU](https://www.gnu.org/licenses/agpl-3.0.en.html) which will
+provide a synopsis of the restrictions placed upon the
+code.
