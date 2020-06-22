@@ -3,6 +3,11 @@ template:
     bootswatch: flatly
 
 navbar:
+  left:
+  - text: Vignette
+    href: articles/vignette.html
+  - text: Reference
+    href: reference/index.html
   right:
   - icon: fa-github
-    href: https://github.com/SMAC-Group/simts
+    href: https://github.com/SMAC-Group/irg

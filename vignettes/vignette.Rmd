@@ -10,8 +10,9 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, echo = FALSE}
-#library(irg)
+```{r, message = FALSE, warning=FALSE}
+library(irg)
+library(mgcv)
 ```
 
 The `irg` package is based on the procedure proposed in @Heerah2020. The functions made available allow to perform Granger-Causal testing for signals that are sampled at the same but irregularly spaced time points. Before using the functions in the package, the signals need to be pre-processed such that they are detrended (mean-stationary) and standardized (normalized). Below we show some examples of possible ways of pre-processing the signals as well as how to use the main functions of the package.
@@ -22,7 +23,7 @@ The `irg` package is based on the procedure proposed in @Heerah2020. The functio
 In this section we use data that was collected during an experiment that measured the time-evolved transcriptome of the three replicates of Arabidopsis roots and shoots. The data `raw_signals` contains a matrix reporting a gene expression count for root and shoot collected at the following time points: 0, 5, 10, 15, 20, 30, 45, 60, 90 and 120 (minutes).
 
 ```{r}
-data(raw_signals)
+data(raw_data)
 head(raw_data)
 ```
 
@@ -48,8 +49,6 @@ avg <- function(signals) {
 
 # Pre-processing function that uses GAM to detrend the signals and then uses previous function to aggregate and normalize
 pre_process <- function(dat_mat) {
-
-  library(mgcv)
 
   root <- dat_mat[,1]
   shoot <- dat_mat[,2]
@@ -106,10 +105,6 @@ Now that all arguments to the function are defined, these can be used within the
 
 In this example we will test the alternative "$H_A$: the first signal (root) Granger-causes the second signal (shoot)" and therefore specify `alternative = "rtos"`.
 
-```{r}
-causal_stat(root = gene_signals$root, shoot = gene_signals$shoot, times = times, theta = theta, alternative = "rtos")
-```
-
 We can see that the output of the function is a list in which the first element is the test statistic (the closer to zero, the less evidence in favour of the alternative hypothesis), while the second element contains the parameters of interest for the alternative hypothesis which, in this case, are the estimated values of $\psi_{shoot}$ and $\gamma_{shoot}$. In order to test whether we can reject the null hypothesis in favour of an alternative hypothesis, we need to obtain the distribution of the test statistic under the null hypothesis.
 
 The main function of the `irg` package is the `granger_test` function which makes use of the `causal_stat` function to obtain a bootstrap distribution of the test statistic under the null hypothesis and then computes a p-value to be compared to a desired level of significance $\alpha$. The arguments to this function are the same as for the `causal_stat` function with the following exceptions:
@@ -122,7 +117,7 @@ The main function of the `irg` package is the `granger_test` function which make
 Let us understand if the previous test statistic allows us to reject the null hypothesis in favour of the specified alternative.
 
 ```{r}
-granger_test(root = gene_signals$root, shoot = gene_signals$shoot, times = times, theta = theta, alternative = "rtos")
+granger_test(root = gene_signals$root, shoot = gene_signals$shoot, times = times, alternative = "rtos", H = 10)
 ```
 
 ## References
