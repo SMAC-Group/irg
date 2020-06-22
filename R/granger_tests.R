@@ -115,7 +115,7 @@ granger_test <- function(root, shoot, times, theta = NULL, alternative = "twodir
     theta_start <- start_values(root = root, shoot = shoot, del.t = del.t)
   }
   # Get test statistic
-  test_stat <- causal_stat(theta_start, root, shoot, times, alternative = alternative)
+  test_stat <- causal_stat(root, shoot, times, theta_start, alternative = alternative)
   # Estimate model under H0
   theta_hat <- optim(theta_start[c(1, 4, 5, 8)], lik_nodir, root = root, shoot = shoot, del.t = del.t)$par
   theta_h0 <- c(exp(theta_hat[1]), 0, 0, exp(theta_hat[2]), exp(theta_hat[3]), 0, 0, exp(theta_hat[4]))
@@ -126,7 +126,7 @@ granger_test <- function(root, shoot, times, theta = NULL, alternative = "twodir
   for (i in 1:H) {
     set.seed(i + seed)
     sim_boot <- sim_proc(theta_h0, times)
-    boot_dist[i] <- causal_stat(theta_h0, sim_boot$root, sim_boot$shoot, times, alternative = alternative)$stat
+    boot_dist[i] <- causal_stat(sim_boot$root, sim_boot$shoot, times, theta_h0, alternative = alternative)$stat
     # update progress bar
     setTxtProgressBar(pb, i)
   }

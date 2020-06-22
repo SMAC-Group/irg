@@ -4,7 +4,9 @@
 \name{signals}
 \alias{signals}
 \title{TITLE}
-\format{TO DO}
+\format{
+TO DO
+}
 \usage{
 signals
 }
