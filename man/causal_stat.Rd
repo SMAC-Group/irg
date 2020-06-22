@@ -38,12 +38,6 @@ XXX
 \note{
 XXX
 }
-\examples{
-data(signals)
-times <- c(0, 5, 10, 15, 20, 30, 45, 60, 90, 120)
-theta <- c(log(1), logit2(0.5*2), log(10), log(1), log(1), logit2(0.5*2), log(10), log(1))
-causal_stat(theta = theta, root = signals$root, shoot = signals$shoot, times = times, HA = "twodir")
-}
 \author{
 Roberto Molinari and Stephane Guerrier
 }

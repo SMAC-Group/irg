@@ -56,9 +56,11 @@ also referred to as "impact time" (represented by \eqn{\gamma}{gamma}).
 XXX
 }
 \examples{
+\dontrun{
 data(signals)
 times <- c(0, 5, 10, 15, 20, 30, 45, 60, 90, 120)
 granger_test(root = signals$root, shoot = signals$shoot, times = times, alternative = "twodir")
+}
 }
 \author{
 Roberto Molinari and Stephane Guerrier

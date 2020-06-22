@@ -19,12 +19,6 @@
 #' @details
 #' XXX
 #' @author Roberto Molinari and Stephane Guerrier
-#' @export
-#' @examples
-#' data(signals)
-#' times <- c(0, 5, 10, 15, 20, 30, 45, 60, 90, 120)
-#' theta <- c(log(1), logit2(0.5*2), log(10), log(1), log(1), logit2(0.5*2), log(10), log(1))
-#' causal_stat(theta = theta, root = signals$root, shoot = signals$shoot, times = times, HA = "twodir")
 causal_stat <- function(root, shoot, times, theta, alternative = "twodir") {
 
   del.t <- diff(times)
@@ -103,9 +97,11 @@ causal_stat <- function(root, shoot, times, theta, alternative = "twodir") {
 #' @author Roberto Molinari and Stephane Guerrier
 #' @export
 #' @examples
+#' \dontrun{
 #' data(signals)
 #' times <- c(0, 5, 10, 15, 20, 30, 45, 60, 90, 120)
 #' granger_test(root = signals$root, shoot = signals$shoot, times = times, alternative = "twodir")
+#' }
 granger_test <- function(root, shoot, times, theta = NULL, alternative = "twodir", H = 100, seed = 123) {
 
   del.t <- diff(times)
