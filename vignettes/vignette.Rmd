@@ -1,0 +1,131 @@
+---
+title: "`irg` Vignette"
+bibliography: biblio.bib
+output: 
+  rmarkdown::html_vignette:
+    fig_caption: yes
+vignette: >
+  %\VignetteIndexEntry{Granger-Causal Testing for Irregularly Sampled Signals}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE}
+#library(irg)
+```
+
+The `irg` package is based on the procedure proposed in @Heerah2020. The functions made available allow to perform Granger-Causal testing for signals that are sampled at the same but irregularly spaced time points. Before using the functions in the package, the signals need to be pre-processed such that they are detrended (mean-stationary) and standardized (normalized). Below we show some examples of possible ways of pre-processing the signals as well as how to use the main functions of the package.
+
+
+## Data Pre-Processing
+
+In this section we use data that was collected during an experiment that measured the time-evolved transcriptome of the three replicates of Arabidopsis roots and shoots. The data `raw_signals` contains a matrix reporting a gene expression count for root and shoot collected at the following time points: 0, 5, 10, 15, 20, 30, 45, 60, 90 and 120 (minutes).
+
+```{r}
+data(raw_signals)
+head(raw_data)
+```
+
+We decide to use the following simple functions to pre-process the data in this matrix (but other more appropriate pre-processing can be chosen).
+
+```{r}
+# Average signals at matching time points and then standardize
+avg <- function(signals) {
+
+  signal <- rep(NA, length(signals)/3)
+
+  for(i in 1:(length(signals)/3)) {
+
+    signal[i] <- mean(signals[(3*(i-1) + 1) : (3*i)])
+
+  }
+
+  signal_std <- (signal - mean(signal))/sd(signal)
+  
+  return(signal_std)
+
+}
+
+# Pre-processing function that uses GAM to detrend the signals and then uses previous function to aggregate and normalize
+pre_process <- function(dat_mat) {
+
+  library(mgcv)
+
+  root <- dat_mat[,1]
+  shoot <- dat_mat[,2]
+  time <- dat_mat[,3]
+
+  mod_root <- gam(root ~ s(time))
+  mod_shoot <- gam(shoot ~ s(time))
+
+  resid_root <- avg(resid(mod_root))
+  resid_shoot <- avg(resid(mod_shoot))
+
+  out <- list(root = resid_root, shoot = resid_shoot)
+
+  return(out)
+
+}
+```
+
+If we apply the ``pre_process` function to the raw signals we obtain the following:
+
+```{r}
+gene_signals <- pre_process(raw_data)
+gene_signals
+```
+
+The result of the pre-processing is saved in the `signals` data made available with the `irg` package.
+
+## Granger-Causal Testing
+
+We can now make use of the `irg` package functions and for this we make use of the pre-processed signals from the previous section.
+
+```{r}
+data(signals)
+```
+
+The null hypothesis for all tests is the following: "$H_0$: The two signals do not Granger-cause each other". Considering this, suppose that we're interested in computing the test statistic for the alternative hypothesis "$H_A$: The first signal (root) Granger-causes the second signal (shoot)", then we would make use of the `causal_stat` function. In order to use this function, aside from the measurements of the two signals (root and shoot), there are other two main arguments to the function: `times` and `theta`. The first one (`times`) is simply a numeric vector containing the measurement times (with the same unit) and, for this data, these were given in the previous section. The second argument of relevance (`theta`) is the parameter vector used as the starting values when optimizing the likelihood functions for the test. This vector contains eight values representing the main parameters of interest for the full model (the remaining parameters are implicitly defined in the optimization process). More specifically, the starting values represent the parameters assuming that both signals Granger-cause each other and therefore this vector can be represented as follows:
+
+$$\theta := \big[\phi_{root},\, \psi_{root},\, \gamma_{root},\, \sigma_{root}^2,\, \phi_{shoot},\, \psi_{shoot},\, \gamma_{shoot},\, \sigma_{shoot}^2\big].$$
+
+The main parameters of interest are the $\psi$ and $\gamma$ parameters which represent the "intensity" and "time" of (Granger-causal) impact of one signal on the other. More specifically, $\psi \in (-1, 1)$ can be interpreted similarly to Pearson's correlation coefficient: the closer the value is to 1 (in absolute value) the greater is the impact of one signal on the other, while the sign represents the direction of the impact where, for example, a negative value implies that the impacted signal grows as the "causing" signal descreases (and viceversa). The $\gamma \in \mathbb{R}^+$ parameter instead represents the distance in time at which the impact of one signal on the other is maximal (under the assumption that the impact increases and then decreases monotonically over time). So, for example, $\psi_{root}$ represents the intensity of the impact of the shoot (second signal) on the root (first signal) while $\gamma_{root}$ represents the time required for the impact of the shoot on the root to be maximal.
+
+While defining the `times` argument is straightforward, specifying the starting values for the parameter vector is not necessarily easy. Given that the signals are standardized, a generally acceptable starting value could be `c(1, 0.5, 1, 1, 1, 0.5, 1, 1)`, however the choice of the $\gamma$ parameters should be in the range of the distances between adjacent time points (for the considered data, a value of $\gamma = 10$ could be reasonable). Finally, in order to estimate these parameters within their admissable ranges, these values need to be transformed through the natural logarithm (`log`) while the $\psi$ parameters are transformed and scaled within the `logit2` function included in the `irg` package (see code below for an example).
+
+```{r}
+times <- c(0, 5, 10, 15, 20, 30, 45, 60, 90, 120) # vector of measurement times
+theta <- c(log(1), logit2(0.5*2), log(10), log(1), log(1), logit2(0.5*2), log(10), log(1)) # transformed starting values
+```
+
+Now that all arguments to the function are defined, these can be used within the function to obtain the Granger-causal test statistic for a given alternative hypothesis of interest. For this reason, the last argument to the function is `alternative` which allows to specify the desired alternative hypothesis and the options are
+
+1. `"rtos"`: "$H_A$: the first signal (root) Granger-causes the second signal (shoot)".
+2. `"stor"`: "$H_A$: the second signal (shoot) Granger-causes the first signal (root)".
+2. `"twodir"`: "$H_A$: both signals Granger-cause each other".
+
+In this example we will test the alternative "$H_A$: the first signal (root) Granger-causes the second signal (shoot)" and therefore specify `alternative = "rtos"`.
+
+```{r}
+causal_stat(root = gene_signals$root, shoot = gene_signals$shoot, times = times, theta = theta, alternative = "rtos")
+```
+
+We can see that the output of the function is a list in which the first element is the test statistic (the closer to zero, the less evidence in favour of the alternative hypothesis), while the second element contains the parameters of interest for the alternative hypothesis which, in this case, are the estimated values of $\psi_{shoot}$ and $\gamma_{shoot}$. In order to test whether we can reject the null hypothesis in favour of an alternative hypothesis, we need to obtain the distribution of the test statistic under the null hypothesis.
+
+The main function of the `irg` package is the `granger_test` function which makes use of the `causal_stat` function to obtain a bootstrap distribution of the test statistic under the null hypothesis and then computes a p-value to be compared to a desired level of significance $\alpha$. The arguments to this function are the same as for the `causal_stat` function with the following exceptions:
+
+- By default the `theta` argument is set to `NULL` which, if left this way, uses an approximate method to estimate reasonable starting values for the full parameter vector.
+- The `granger_test` function has two additional arguments:
+    - `H`: the number of boostrap replicates of the test statistic under the null hypothesis. The larger this number, the better the approximation of the bootstrap distribution to the true null distribution. By defult the value is 100 which allows the p-value to be computed in a reasonable amount of time (depending on the sample sizes) while larger values will obviously require higher computational times (although obtaining better approximations).
+    - `seed`: this is a value that allows to control the random generation of the null distribution, implying that the results on specific signals will remain the same if the seed is fixed (by default `seed = 123`).
+
+Let us understand if the previous test statistic allows us to reject the null hypothesis in favour of the specified alternative.
+
+```{r}
+granger_test(root = gene_signals$root, shoot = gene_signals$shoot, times = times, theta = theta, alternative = "rtos")
+```
+
+## References
+
+This package is developed based on the work put forward in @Heerah2020.
+

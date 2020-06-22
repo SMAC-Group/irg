@@ -1,0 +1,23 @@
+Package: irg
+Type: Package
+Title: TO DO
+Version: 0.1.1
+Date: 2020-06-22
+LazyData: true
+Authors@R: c(
+    person("Roberto", "Molinari", email = "roberto.molinari@hotmail.it", role = c("aut","cre","cph")),
+    person("Stephane", "Guerrier", role = c("aut","cph"))
+    )
+Maintainer: Roberto Molinari <roberto.molinari@hotmail.it>
+Description: TO DO
+Depends:
+    R (>= 3.6.0)
+License: AGPL-3 | file LICENSE
+RoxygenNote: 7.0.2
+Encoding: UTF-8
+Suggests:
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+URL: https://github.com/SMAC-Group/irg, https://www.biorxiv.org/content/10.1101/2020.06.15.152819v1
+BugReports: https://github.com/SMAC-Group/irg/issues
