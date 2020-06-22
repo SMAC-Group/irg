@@ -107,35 +107,56 @@ causal_stat <- function(root, shoot, times, theta, alternative = "twodir") {
 #' times <- c(0, 5, 10, 15, 20, 30, 45, 60, 90, 120)
 #' granger_test(root = signals$root, shoot = signals$shoot, times = times, alternative = "twodir")
 granger_test <- function(root, shoot, times, theta = NULL, alternative = "twodir", H = 100, seed = 123) {
+
   del.t <- diff(times)
+
   if(is.numeric(theta)) {
+
     if(length(theta) != 8) stop("Initial parameter vector must contain exactly 8 numeric values")
+
     theta_start <- c(log(theta[1]), logit2(theta[2]*2), log(theta[3]), log(theta[4]), log(theta[5]), logit2(theta[6]*2), log(theta[7]), log(theta[8]))
+
   } else {
+
     theta_start <- start_values(root = root, shoot = shoot, del.t = del.t)
+
   }
+
   # Get test statistic
   test_stat <- causal_stat(root, shoot, times, theta_start, alternative = alternative)
+
   # Estimate model under H0
   theta_hat <- optim(theta_start[c(1, 4, 5, 8)], lik_nodir, root = root, shoot = shoot, del.t = del.t)$par
   theta_h0 <- c(exp(theta_hat[1]), 0, 0, exp(theta_hat[2]), exp(theta_hat[3]), 0, 0, exp(theta_hat[4]))
+
   # Initialisation for parametric bootstrap
   boot_dist <- rep(NA, H)
+
   # Start bootstrap
   pb <- txtProgressBar(min = 0, max = H, style = 3)
+
   for (i in 1:H) {
+
     set.seed(i + seed)
     sim_boot <- sim_proc(theta_h0, times)
     boot_dist[i] <- causal_stat(sim_boot$root, sim_boot$shoot, times, theta_h0, alternative = alternative)$stat
+
     # update progress bar
     setTxtProgressBar(pb, i)
+
   }
+
   close(pb)
+
   # Refresh seed for system
   set.seed(Sys.time())
+
   # Compute p-value
   p_value <- (sum(test_stat$stat < boot_dist) + 1)/(H + 1)
+
   # Output results
   output <- list("alternative" = alternative, "pvalue" = p_value, "parameters" = test_stat$parameters)
+
   return(output)
+
 }
