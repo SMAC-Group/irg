@@ -144,9 +144,6 @@ granger_test <- function(root, shoot, times, theta = NULL, alternative = "twodir
 
   close(pb)
 
-  # Refresh seed for system
-  set.seed(Sys.time())
-
   # Compute p-value
   p_value <- (sum(test_stat$stat < boot_dist) + 1)/(H + 1)
 
