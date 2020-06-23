@@ -80,7 +80,7 @@ causal_stat <- function(root, shoot, times, theta, alternative = "twodir") {
 #' The default value is \code{"twodir"} which tests the alternative that "both signals Granger-cause each other". The other options are \code{"rtos"} which tests the alternative
 #' "the first signal (root) Granger-causes the second signal (shoot)" and \code{"stor"} which tests the alternative "the second signal (shoot) Granger-causes the first signal (root)".
 #' @param seed A positive \code{integer} defining the seed value for the simulated signals throughout the parametric bootstrap procedure (default is \code{seed = 123}).
-#' @note XXX
+#' @param showprogress A \code{boolean} determining whether a progress-bar should be shown to update the user on the progress of the bootstrap procedure (defaults to \code{TRUE}).
 #' @return A \code{list} with the following objects:
 #' \describe{
 #'  \item{alternative}{The code of the alternative hypothesis that is tested.}
@@ -103,7 +103,7 @@ causal_stat <- function(root, shoot, times, theta, alternative = "twodir") {
 #' times <- c(0, 5, 10, 15, 20, 30, 45, 60, 90, 120)
 #' granger_test(root = signals$root, shoot = signals$shoot, times = times, alternative = "twodir")
 #' }
-granger_test <- function(root, shoot, times, theta = NULL, alternative = "twodir", H = 100, seed = 123) {
+granger_test <- function(root, shoot, times, theta = NULL, alternative = "twodir", H = 100, seed = 123, showprogress = TRUE) {
 
   del.t <- diff(times)
 
@@ -130,7 +130,7 @@ granger_test <- function(root, shoot, times, theta = NULL, alternative = "twodir
   boot_dist <- rep(NA, H)
 
   # Start bootstrap
-  pb <- txtProgressBar(min = 0, max = H, style = 3)
+  if(showprogress == TRUE) pb <- txtProgressBar(min = 0, max = H, style = 3)
 
   for (i in 1:H) {
 
@@ -139,11 +139,11 @@ granger_test <- function(root, shoot, times, theta = NULL, alternative = "twodir
     boot_dist[i] <- causal_stat(sim_boot$root, sim_boot$shoot, times, theta_h0, alternative = alternative)$stat
 
     # update progress bar
-    setTxtProgressBar(pb, i)
+    if(showprogress == TRUE) setTxtProgressBar(pb, i)
 
   }
 
-  close(pb)
+  if(showprogress == TRUE) close(pb)
 
   # Compute p-value
   p_value <- (sum(test_stat$stat < boot_dist) + 1)/(H + 1)

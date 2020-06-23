@@ -11,7 +11,8 @@ granger_test(
   theta = NULL,
   alternative = "twodir",
   H = 100,
-  seed = 123
+  seed = 123,
+  showprogress = TRUE
 )
 }
 \arguments{
@@ -32,6 +33,8 @@ The default value is \code{"twodir"} which tests the alternative that "both sign
 \item{H}{A positive \code{integer} representing the number of parametric bootstrap replicates used to estimate the distribution of the test statistic under the null hypothesis.}
 
 \item{seed}{A positive \code{integer} defining the seed value for the simulated signals throughout the parametric bootstrap procedure (default is \code{seed = 123}).}
+
+\item{showprogress}{A \code{boolean} determining whether a progress-bar should be shown to update the user on the progress of the bootstrap procedure (defaults to \code{TRUE}).}
 }
 \value{
 A \code{list} with the following objects:
@@ -51,9 +54,6 @@ According to the alternative hypothesis specified by the user, the function comp
 If the null hypothesis is rejected in favour of the alternative, then the user can obtain information on (i) how strong the impact of a signal on the other is and
 (ii) its direction (positive or negative) also referred to as "intensity" (represented by \eqn{\psi}{psi}) as well as the time point at which this impact is maximal
 also referred to as "impact time" (represented by \eqn{\gamma}{gamma}).
-}
-\note{
-XXX
 }
 \examples{
 \dontrun{

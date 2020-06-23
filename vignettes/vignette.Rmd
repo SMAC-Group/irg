@@ -113,11 +113,12 @@ The main function of the `irg` package is the `granger_test` function which make
 - The `granger_test` function has two additional arguments:
     - `H`: the number of boostrap replicates of the test statistic under the null hypothesis. The larger this number, the better the approximation of the bootstrap distribution to the true null distribution. By defult the value is 100 which allows the p-value to be computed in a reasonable amount of time (depending on the sample sizes) while larger values will obviously require higher computational times (although obtaining better approximations).
     - `seed`: this is a value that allows to control the random generation of the null distribution, implying that the results on specific signals will remain the same if the seed is fixed (by default `seed = 123`).
+    - `showprogress`: a boolean (TRUE or FALSE) determining whether the user wants to be updated on the progress of the bootstrap procedure through the visualization of a progress-bar.
 
 Let us understand if the previous test statistic allows us to reject the null hypothesis in favour of the specified alternative.
 
 ```{r}
-granger_test(root = gene_signals$root, shoot = gene_signals$shoot, times = times, alternative = "rtos", H = 10)
+granger_test(root = gene_signals$root, shoot = gene_signals$shoot, times = times, alternative = "rtos", H = 10, showprogress = FALSE)
 ```
 
 ## References
