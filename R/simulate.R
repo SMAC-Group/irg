@@ -2,18 +2,17 @@
 #' @description TO DO
 #' @param theta A \code{double} value of the vector containing the detrended and standardized measurements of the first signal (the root expressions).
 #' @param times A \code{double} value of the vector containing the detrended and standardized measurements of the second signal (the shoot expressions).
-#' @param burn_lenght A \code{double} value of the vector collecting the times (measured in the same unit) at which the measurements were taken
+#' @param burn_length A \code{double} value of the vector collecting the times (measured in the same unit) at which the measurements were taken
 #' for both signals (\code{root} and \code{shoot}).
 #' @param burn_step A \code{double} value for the starting values of the parameter vector \eqn{\theta}{theta} of the full causal model (must be of length 8).
-#' @note XXX
 #' @return A \code{list} containing the following objects:
 #' \describe{
-#'  \item{stat}{The value of the Granger-Causal test statistic for the specified alternative hypothesis \code{HA}}
-#'  \item{parameters}{A \code{double} vector containing the values of the parameters relevant for the specified alternative hypothesis \code{HA}
+#'  \item{root}{The value of the Granger-Causal test statistic for the specified alternative hypothesis \code{HA}}
+#'  \item{shoot}{A \code{double} vector containing the values of the parameters relevant for the specified alternative hypothesis \code{HA}
 #'  (i.e. intensity of the causal impact (\eqn{\psi}{psi}) and the time of maximal impact (\eqn{\gamma}{gamma}))}
 #' }
 #' @details
-#' XXX
+#' TO DO
 #' @author Roberto Molinari and Stephane Guerrier
 #' @export
 sim_proc <- function(theta, times, burn_length = 3*length(times), burn_step = median(diff(times))) {

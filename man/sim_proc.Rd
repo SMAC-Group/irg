@@ -16,16 +16,16 @@ sim_proc(
 
 \item{times}{A \code{double} value of the vector containing the detrended and standardized measurements of the second signal (the shoot expressions).}
 
-\item{burn_step}{A \code{double} value for the starting values of the parameter vector \eqn{\theta}{theta} of the full causal model (must be of length 8).}
-
-\item{burn_lenght}{A \code{double} value of the vector collecting the times (measured in the same unit) at which the measurements were taken
+\item{burn_length}{A \code{double} value of the vector collecting the times (measured in the same unit) at which the measurements were taken
 for both signals (\code{root} and \code{shoot}).}
+
+\item{burn_step}{A \code{double} value for the starting values of the parameter vector \eqn{\theta}{theta} of the full causal model (must be of length 8).}
 }
 \value{
 A \code{list} containing the following objects:
 \describe{
- \item{stat}{The value of the Granger-Causal test statistic for the specified alternative hypothesis \code{HA}}
- \item{parameters}{A \code{double} vector containing the values of the parameters relevant for the specified alternative hypothesis \code{HA}
+ \item{root}{The value of the Granger-Causal test statistic for the specified alternative hypothesis \code{HA}}
+ \item{shoot}{A \code{double} vector containing the values of the parameters relevant for the specified alternative hypothesis \code{HA}
  (i.e. intensity of the causal impact (\eqn{\psi}{psi}) and the time of maximal impact (\eqn{\gamma}{gamma}))}
 }
 }
@@ -33,10 +33,7 @@ A \code{list} containing the following objects:
 TO DO
 }
 \details{
-XXX
-}
-\note{
-XXX
+TO DO
 }
 \author{
 Roberto Molinari and Stephane Guerrier

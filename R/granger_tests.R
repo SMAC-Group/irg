@@ -9,7 +9,6 @@
 #' @param alternative A \code{character} value defining the alternative hypothesis for the Granger-Causal test (with the null hypothesis always being "the signals do not Granger-cause each other").
 #' The default value is \code{"twodir"} which tests the alternative that "both signals Granger-cause each other". The other options are \code{"rtos"} which tests the alternative
 #' "the first signal (root) Granger-causes the second signal (shoot)" and \code{"stor"} which tests the alternative "the second signal (shoot) Granger-causes the first signal (root)".
-#' @note XXX
 #' @return A \code{list} containing the following objects:
 #' \describe{
 #'  \item{stat}{The value of the Granger-Causal test statistic for the specified alternative hypothesis \code{HA}}
@@ -17,7 +16,7 @@
 #'  (i.e. intensity of the causal impact (\eqn{\psi}{psi}) and the time of maximal impact (\eqn{\gamma}{gamma}))}
 #' }
 #' @details
-#' XXX
+#' TO DO
 #' @author Roberto Molinari and Stephane Guerrier
 causal_stat <- function(root, shoot, times, theta, alternative = "twodir") {
 
@@ -95,6 +94,8 @@ causal_stat <- function(root, shoot, times, theta, alternative = "twodir") {
 #' (ii) its direction (positive or negative) also referred to as "intensity" (represented by \eqn{\psi}{psi}) as well as the time point at which this impact is maximal
 #' also referred to as "impact time" (represented by \eqn{\gamma}{gamma}).
 #' @author Roberto Molinari and Stephane Guerrier
+#' @import stats
+#' @import utils
 #' @export
 #' @examples
 #' \dontrun{

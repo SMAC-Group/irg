@@ -4,9 +4,9 @@
 \name{irg-package}
 \alias{irg}
 \alias{irg-package}
-\title{irg: TO DO}
+\title{irg: Granger-Causal Tests for Irregularly Sampled Signals}
 \description{
-TO DO
+This package implements the framework proposed in Heerah et al. (2020) to perform Granger-Causal tests on (short) bivariate and irregularly sampled signals (with same sampling times for each signal). The main functions allow to plot the two signals of interest and to perform a Granger-Causal test for the different directions of possible influence.
 }
 \details{
 The data sets in this package may change at a moments notice.

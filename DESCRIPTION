@@ -1,6 +1,6 @@
 Package: irg
 Type: Package
-Title: TO DO
+Title: Granger-Causal Tests for Irregularly Sampled Signals
 Version: 0.1.1
 Date: 2020-06-22
 LazyData: true
@@ -9,9 +9,13 @@ Authors@R: c(
     person("Stephane", "Guerrier", role = c("aut","cph"))
     )
 Maintainer: Roberto Molinari <roberto.molinari@hotmail.it>
-Description: TO DO
+Description: This package implements the framework proposed in Heerah et al. (2020) to perform Granger-Causal tests on (short) bivariate and irregularly sampled signals (with same sampling times for each signal). The main functions allow to plot the two signals of interest and to perform a Granger-Causal test for the different directions of possible influence.
 Depends:
     R (>= 3.6.0)
+Imports:
+    stats,
+    utils,
+    mgcv
 License: AGPL-3 | file LICENSE
 RoxygenNote: 7.1.0
 Encoding: UTF-8

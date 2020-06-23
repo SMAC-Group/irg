@@ -33,10 +33,7 @@ This function is used within the \code{granger_test} function to compute the Gra
 as well as on the simulated ones based on the \code{sim_proc} function (see Heerah et al., 2020).
 }
 \details{
-XXX
-}
-\note{
-XXX
+TO DO
 }
 \author{
 Roberto Molinari and Stephane Guerrier
