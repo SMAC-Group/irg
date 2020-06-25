@@ -124,9 +124,10 @@ granger_test <- function(root, shoot, times, theta = NULL, alternative = "twodir
 
   # Estimate model under H0
   theta_hat <- optim(theta_start[c(1, 4, 5, 8)], lik_nodir, root = root, shoot = shoot, del.t = del.t)$par
-  theta_h0 <- c(exp(theta_hat[1]), 0, 0, exp(theta_hat[2]), exp(theta_hat[3]), 0, 0, exp(theta_hat[4]))
+  theta_sim <- c(exp(theta_hat[1]), 0, 0, exp(theta_hat[2]), exp(theta_hat[3]), 0, 0, exp(theta_hat[4]))
+  theta_h0 <- c(theta_hat[1], 0, 0, theta_hat[2], theta_hat[3], 0, 0, theta_hat[4])
 
-  # Initialisation for parametric bootstrap
+  # Initialization for parametric bootstrap
   boot_dist <- rep(NA, H)
 
   # Start bootstrap
@@ -135,7 +136,7 @@ granger_test <- function(root, shoot, times, theta = NULL, alternative = "twodir
   for (i in 1:H) {
 
     set.seed(i + seed)
-    sim_boot <- sim_proc(theta_h0, times)
+    sim_boot <- sim_proc(theta_sim, times)
     boot_dist[i] <- causal_stat(sim_boot$root, sim_boot$shoot, times, theta_h0, alternative = alternative)$stat
 
     # update progress bar
