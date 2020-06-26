@@ -153,7 +153,7 @@ granger_test <- function(root, shoot, times, theta = NULL, alternative = "twodir
   p_value <- (sum(test_stat$stat < boot_dist) + 1)/(H + 1)
 
   # Output results
-  output <- list("alternative" = alternative, "pvalue" = p_value, "parameters" = test_stat$parameters)
+  output <- list("alternative" = alternative, "stat" = test_stat$stat, "pvalue" = p_value, "parameters" = test_stat$parameters)
 
   return(output)
 

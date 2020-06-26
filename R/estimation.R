@@ -30,14 +30,6 @@ logit_inv <- function(x) {
 }
 
 
-#' TO DO
-#' @description TO DO
-#' @param x A \code{double} value of the vector containing the detrended and standardized measurements of the first signal (the root expressions).
-#' @return TO DO
-#' @author Roberto Molinari and Stephane Guerrier
-#' @export
-#' @examples
-#' logit2(0.5*2)
 logit2 <- function(x) {
 
   log((x + 2)/(2 - x))
