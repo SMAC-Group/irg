@@ -84,7 +84,8 @@ causal_stat <- function(root, shoot, times, theta, alternative = "twodir") {
 #' @return A \code{list} with the following objects:
 #' \describe{
 #'  \item{alternative}{The code of the alternative hypothesis that is tested.}
-#'  \item{pvalue}{The p-value computed using the bootstrap distribution.}
+#'  \item{stat}{The test statistic used to perform the Granger-Causal test.}
+#'  \item{pvalue}{The p-value computed using the bootstrap distribution under the null hypothesis.}
 #'  \item{parameters}{The parameters of "intensity" and "time of impact" for the alternative hypothesis that is tested.}
 #' }
 #' @details
