@@ -32,9 +32,6 @@ A \code{list} containing the following objects:
 This function is used within the \code{granger_test} function to compute the Granger-Causal test statistic on the signals of interest
 as well as on the simulated ones based on the \code{sim_proc} function (see Heerah et al., 2020).
 }
-\details{
-TO DO
-}
 \author{
 Roberto Molinari and Stephane Guerrier
 }

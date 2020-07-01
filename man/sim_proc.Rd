@@ -35,9 +35,6 @@ A \code{list} containing the following objects:
 This function allows to simulate a bivariate time series sampled at irregular intervals and following a bivariate first-order autoregressive process as
 described in Heerah et al. (2020).
 }
-\details{
-TO DO
-}
 \examples{
 theta <- c(1, 0.99, 10, 0.01, 1, 0, 0, 0.1)
 times <- c(0, 5, 10, 15, 20, 30, 45, 60, 90, 120)

@@ -51,15 +51,6 @@ lik_twodir <- function(theta, root, shoot, del.t){
   delta.shoot <- exp(theta[7])
   sigma.shoot <- exp(theta[8])
 
-  # phi.root <- exp(theta[1])
-  # psi.root <- logit2_inv(theta[2])/2
-  # delta.root <- 55*logit_inv(theta[3]) + 5
-  # sigma.root <- exp(theta[4])
-  # phi.shoot <- exp(theta[5])
-  # psi.shoot <- logit2_inv(theta[6])/2
-  # delta.shoot <- 55*logit_inv(theta[7]) + 5
-  # sigma.shoot <- exp(theta[8])
-
   iter1 <- 0
 
   for (i in 2:length(root)) {
@@ -101,15 +92,6 @@ lik_shoot_root <- function(theta, root, shoot, del.t){
   delta.shoot <- 0
   sigma.shoot <- exp(theta[6])
 
-  # phi.root <- exp(theta[1])
-  # psi.root <- logit2_inv(theta[2])/2
-  # delta.root <- (55)*logit_inv(theta[3]) + 5
-  # sigma.root <- exp(theta[4])
-  # phi.shoot <- exp(theta[5])
-  # psi.shoot <-  0
-  # delta.shoot <- 10
-  # sigma.shoot <- exp(theta[6])
-
   iter1 <- 0
 
   for (i in 2:length(root)) {
@@ -150,15 +132,6 @@ lik_root_shoot <- function(theta, root, shoot, del.t) {
   psi.shoot <- logit2_inv(theta[4])/2
   delta.shoot <- exp(theta[5])
   sigma.shoot <- exp(theta[6])
-
-  # phi.root <- exp(theta[1])
-  # psi.root <- 0
-  # delta.root <- 10
-  # sigma.root <- exp(theta[2])
-  # phi.shoot <- exp(theta[3])
-  # psi.shoot <- logit2_inv(theta[4])/2
-  # delta.shoot <- 55*logit_inv(theta[5]) + 5
-  # sigma.shoot <- exp(theta[6])
 
   iter1 <- 0
 

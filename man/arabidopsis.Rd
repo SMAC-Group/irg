@@ -3,14 +3,22 @@
 \docType{data}
 \name{arabidopsis}
 \alias{arabidopsis}
-\title{TITLE}
+\title{Pre-processed measurements of gene expressions of Arabidopsis thaliana}
 \format{
-TO DO
+A list with 2 elements:
+\describe{
+   \item{roots}{Data frame containing pre-processed gene expression measurements over time in the root (rows are different expressions and columns are measurement times)}
+   \item{shoot}{Data frame containing pre-processed gene expression measurements over time in the shoot (rows are different expressions and columns are measurement times)}
+}
+}
+\source{
+\url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE97500}
 }
 \usage{
 arabidopsis
 }
 \description{
-TO DO
+A list containing datasets of gene expressions measured over time in the root and shoot of Arabidopsis thaliana respectively. These were pre-processed
+from the fine scale time-series RNA-Seq of shoot and root responses to Nitrogen supply in Arabidopsis thaliana from the Gene Expression Omnibus.
 }
 \keyword{datasets}

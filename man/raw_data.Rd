@@ -3,14 +3,23 @@
 \docType{data}
 \name{raw_data}
 \alias{raw_data}
-\title{TITLE}
+\title{Raw measurements of two gene expressions of Arabidopsis thaliana}
 \format{
-TO DO
+A matrix with 30 rows and 3 columns (variables):
+\describe{
+   \item{root}{expression in the root}
+   \item{shoot}{expression in the shoot}
+   \item{time}{time from the beginning of the experiment (in minutes) at which measurements were taken}
+}
+}
+\source{
+\url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE97500}
 }
 \usage{
 raw_data
 }
 \description{
-TO DO
+A dataset containing three repeated measurements of two gene expressions (root and shoot respectively) from the fine scale time-series
+RNA-Seq of shoot and root responses to Nitrogen supply in Arabidopsis thaliana from the Gene Expression Omnibus.
 }
 \keyword{datasets}

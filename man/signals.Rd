@@ -3,14 +3,19 @@
 \docType{data}
 \name{signals}
 \alias{signals}
-\title{TITLE}
+\title{Detrended and standardized measurements of two gene expressions of Arabidopsis thaliana}
 \format{
-TO DO
+A list with the following elements:
+\describe{
+   \item{root}{pre-processed expression in the root}
+   \item{shoot}{pre-processed expression in the shoot}
+}
 }
 \usage{
 signals
 }
 \description{
-TO DO
+A list containing measurements of two pre-processed gene expressions (root and shoot respectively) from the fine scale time-series
+RNA-Seq of shoot and root responses to Nitrogen supply in Arabidopsis thaliana from the Gene Expression Omnibus (whose raw measurements can be found in \code{raw_data}).
 }
 \keyword{datasets}

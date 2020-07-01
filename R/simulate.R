@@ -14,8 +14,6 @@
 #'  \item{root}{The simulated values for the first signal (root)}
 #'  \item{shoot}{The simulated values for the second signal (shoot)}
 #' }
-#' @details
-#' TO DO
 #' @author Roberto Molinari and Stephane Guerrier
 #' @export
 #' @examples

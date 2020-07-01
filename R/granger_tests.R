@@ -15,8 +15,6 @@
 #'  \item{parameters}{A \code{double} vector containing the values of the parameters relevant for the specified alternative hypothesis \code{HA}
 #'  (i.e. intensity of the causal impact (\eqn{\psi}{psi}) and the time of maximal impact (\eqn{\gamma}{gamma}))}
 #' }
-#' @details
-#' TO DO
 #' @author Roberto Molinari and Stephane Guerrier
 causal_stat <- function(root, shoot, times, theta, alternative = "twodir") {
 
