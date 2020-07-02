@@ -27,7 +27,7 @@ data(raw_data)
 head(raw_data)
 ```
 
-We decide to use the following simple functions to pre-process the data in this matrix (but other more appropriate pre-processing can be chosen).
+We decide to use the following simple functions to pre-process the data in this matrix (but other pre-processing techniques can be chosen).
 
 ```{r}
 # Average signals at matching time points and then standardize
@@ -70,21 +70,58 @@ pre_process <- function(dat_mat) {
 If we apply the ``pre_process` function to the raw signals we obtain the following:
 
 ```{r}
-gene_signals <- pre_process(raw_data)
-gene_signals
+signals <- pre_process(raw_data)
+signals
 ```
 
 The result of the pre-processing is saved in the `signals` data made available with the `irg` package.
 
 ## Granger-Causal Testing
 
-We can now make use of the `irg` package functions and for this we make use of the pre-processed signals from the previous section.
+Once the signals have been pre-processed, it is possible to make use of the `irg` package functions and for this we make use of the pre-processed signals made available in the other dataset made available in the package: `arabidopsis`. 
 
 ```{r}
-data(signals)
+data(arabidopsis)
 ```
 
-The null hypothesis for all tests is the following: "$H_0$: The two signals do not Granger-cause each other". Considering this, suppose that we're interested in computing the test statistic for the alternative hypothesis "$H_A$: The first signal (root) Granger-causes the second signal (shoot)", then we would make use of the `causal_stat` function. In order to use this function, aside from the measurements of the two signals (root and shoot), there are other two main arguments to the function: `times` and `theta`. The first one (`times`) is simply a numeric vector containing the measurement times (with the same unit) and, for this data, these were given in the previous section. The second argument of relevance (`theta`) is the parameter vector used as the starting values when optimizing the likelihood functions for the test. This vector contains eight values representing the main parameters of interest for the full model (the remaining parameters are implicitly defined in the optimization process). More specifically, the starting values represent the parameters assuming that both signals Granger-cause each other and therefore this vector can be represented as follows:
+This is a list containing two dataframes, for root and shoot gene expressions respectively, containing the gene expressions collected over the following time points: 0, 5, 10, 15, 20, 30, 45, 60, 90, 120 (in minutes). It can be noticed how the time intervals are irregular between measurements and therefore the `irg` package makes available a Granger-Causal testing framework for these specific settings.
+
+The main function of the package is the `granger_test` function. The null hypothesis for all tests this function implements is the following: 
+
+"$H_0$: The two signals have no Granger-Causal impact on each other". 
+
+The goal of the function is to understand whether this null hypothesis can be rejected in favour of a specific alternative hypothesis, an example of which is given by:
+
+"$H_A$: The first signal (root) has a Granger-Causal impact on the second signal (shoot)".
+
+In order to perform this test of hypothesis, @Heerah2020 put forward a bivariate autoregressive model for irregularly sampled signals mainly characterized by the following parameter vector (other parameters not in this vector are implicitly defined in the function):
+
+$$\theta := \big[\phi_{root},\, \psi_{root},\, \gamma_{root},\, \sigma_{root}^2,\, \phi_{shoot},\, \psi_{shoot},\, \gamma_{shoot},\, \sigma_{shoot}^2\big].$$
+The subscripts "root" and "shoot" underline how these parameters contribute to the behaviour over time of either the first signal (root) or second signal (shoot). While the $\phi$ and $\sigma^2$ parameters are specific to the dependence of a signal only on its own past (and represent the range of dependence on the past and the residual variance respectively), the main parameters of interest for the mentioned Granger-Causal testing framework are the $\psi$ and $\gamma$ parameters which represent the "intensity" and "time" of maximal (Granger-Causal) impact of one signal on the other. More specifically, $\psi \in (-1, 1)$ can be interpreted similarly to Pearson's correlation coefficient: the closer the value is to 1 (in absolute value) the greater is the impact of one signal on the other, while the sign represents the direction of the impact where, for example, a negative value implies that the impacted signal grows as the "causing" signal descreases (and viceversa). The $\gamma \in \mathbb{R}^+$ parameter instead represents the distance in time at which the impact of one signal on the other is maximal (under the assumption that the impact increases and then decreases monotonically over time). So, for example, $\psi_{root}$ represents the intensity of the impact of the shoot (second signal) on the root (first signal) while $\gamma_{root}$ represents the time required for the impact of the shoot on the root to be maximal.
+
+Estimating the parameters of these models via maximum-likelihood (under a Gaussian assumption), it is then possible to perform a Likelihood Ratio Test (LRT) to understand if the model under the alternative hypothesis significantly improves the fit of the signals. Given the short length of signals usually measured in biological experiments, the LRT test is performed using parametric bootstrap to approximate the small sample distribution under the null hypothesis. This procedure is performed by the `granger_test` function whose syntax is given below:
+
+```{r, eval=FALSE}
+granger_test(root, shoot, times, theta = NULL, alternative = "twodir", 
+             H = 100, seed = 123, showprogress = TRUE)
+```
+
+The first two arguments are the first (`root`) and second (`shoot`) signals for which we want to test a Granger-Causal relationship. The `times` argument is the numeric vector containing the time points at which the measurements were taken (in the same unit of time) while `theta` represents numeric vector (of length 8) containing the starting values for the parameter vector $\theta$ described earlier (if left empty, the starting values will be estimated by the function itself). The `alternative` argument represents the alternative hypothesis we're interested in testing: by default we have `alternative = "twodir"` which indicates that we're testing the alternative hypothesis:
+
+"$H_A$: The two signals have a Granger-Causal impact on each other".
+
+The other possible alternative syntax is the following:
+1. `"rtos"`: "$H_A$: the first signal (root) has a Granger-Causal impact on the second signal (shoot)".
+2. `"stor"`: "$H_A$: the second signal (shoot) has a Granger-Causal impact on the first signal (root)".
+
+The final arguments to the function concern the parametric bootstrap procedure used to generate the null distribution:
+- `H`: the number of bootstrap replicates. The larger this number is, the better the approximation of the null distribution but the slower the procedure will be to perform the test.
+- `seed`: the seed value used to generate the random signals for the bootstrap distribution. A fixed seed allows to replicate the exact results of the test.
+- `showprogress`: a boolean parameter allowing to visualize (or not) a progress bar to update the user on the progress of the bootstrap procedure (particularly useful with large values of `H` and or longer signals).
+
+To perform this parametric bootstrap procedure, the `granger_test` uses the `sim_proc` function also made available by the `irg` package.
+
+then we would make use of the `causal_stat` function. In order to use this function, aside from the measurements of the two signals (root and shoot), there are other two main arguments to the function: `times` and `theta`. The first one (`times`) is simply a numeric vector containing the measurement times (with the same unit) and, for this data, these were given in the previous section. The second argument of relevance (`theta`) is the parameter vector used as the starting values when optimizing the likelihood functions for the test. This vector contains eight values representing the main parameters of interest for the full model (the remaining parameters are implicitly defined in the optimization process). More specifically, the starting values represent the parameters assuming that both signals Granger-cause each other and therefore this vector can be represented as follows:
 
 $$\theta := \big[\phi_{root},\, \psi_{root},\, \gamma_{root},\, \sigma_{root}^2,\, \phi_{shoot},\, \psi_{shoot},\, \gamma_{shoot},\, \sigma_{shoot}^2\big].$$
 
@@ -94,7 +131,7 @@ While defining the `times` argument is straightforward, specifying the starting 
 
 ```{r}
 times <- c(0, 5, 10, 15, 20, 30, 45, 60, 90, 120) # vector of measurement times
-theta <- c(log(1), logit2(0.5*2), log(10), log(1), log(1), logit2(0.5*2), log(10), log(1)) # transformed starting values
+theta <- c(1, 0.5, 10, 1, 1, 0.5, 10, 1) # starting values for the parameter vector
 ```
 
 Now that all arguments to the function are defined, these can be used within the function to obtain the Granger-causal test statistic for a given alternative hypothesis of interest. For this reason, the last argument to the function is `alternative` which allows to specify the desired alternative hypothesis and the options are
@@ -118,7 +155,7 @@ The main function of the `irg` package is the `granger_test` function which make
 Let us understand if the previous test statistic allows us to reject the null hypothesis in favour of the specified alternative.
 
 ```{r}
-granger_test(root = gene_signals$root, shoot = gene_signals$shoot, times = times, alternative = "rtos", H = 10, showprogress = FALSE)
+granger_test(root = signals$root, shoot = signals$shoot, times = times, alternative = "rtos", H = 10, showprogress = FALSE)
 ```
 
 ## References
