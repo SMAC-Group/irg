@@ -113,8 +113,9 @@ The first two arguments are the first (`root`) and second (`shoot`) signals for 
 "$H_A$: The two signals have a Granger-Causal impact on each other".
 
 The other possible alternative syntax is the following:
-    1. `"rtos"`: "$H_A$: the first signal (root) has a Granger-Causal impact on the second signal (shoot)".
-    2. `"stor"`: "$H_A$: the second signal (shoot) has a Granger-Causal impact on the first signal (root)".
+
+1. `"rtos"`: "$H_A$: the first signal (root) has a Granger-Causal impact on the second signal (shoot)".
+2. `"stor"`: "$H_A$: the second signal (shoot) has a Granger-Causal impact on the first signal (root)".
 
 The final arguments to the function concern the parametric bootstrap procedure used to generate the null distribution:
     - `H`: the number of bootstrap replicates. The larger this number is, the better the approximation of the null distribution but the slower the procedure will be to perform the test.
@@ -138,10 +139,11 @@ granger_test(root = sim$root, shoot = sim$shoot, times = times, alternative = "s
 ```
 
 We can see that the output of this function is a list with the following four elements:
-    1. `alternative`: the code of the alternative hypothesis being tested.
-    2. `stat`: the value of the LRT statistic for the Granger-Causal alternative hypothesis being tested.
-    3. `pvalue`: the p-value of the test, with a small p-value indicating evidence to reject the null hypothesis in favour of the specified alternative.
-    4. `parameters`: the values of the parameters of interest for the specific alternative hypothesis (i.e. the $\psi$ and $\gamma$ parameters).
+
+1. `alternative`: the code of the alternative hypothesis being tested.
+2. `stat`: the value of the LRT statistic for the Granger-Causal alternative hypothesis being tested.
+3. `pvalue`: the p-value of the test, with a small p-value indicating evidence to reject the null hypothesis in favour of the specified alternative.
+4. `parameters`: the values of the parameters of interest for the specific alternative hypothesis (i.e. the $\psi$ and $\gamma$ parameters).
 
 In this simulated example we see that, at a significance level of 0.01, we can reject the null hypothesis in favour of the alternative hypothesis (indeed, in this case we obtain the smallest p-value attainable given the value of `H`). Hence, having rejected the null hypothesis we can go and interpret the parameter values which, as can be seen, are very close to the true parameter values from which we simulated.
 

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Raw measurements of two gene expressions of Arabidopsis thaliana — raw_data • irg</title>
+<title>Pre-processed measurements of gene expressions of Arabidopsis thaliana — arabidopsis • irg</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="Raw measurements of two gene expressions of Arabidopsis thaliana — raw_data" />
-<meta property="og:description" content="A dataset containing three repeated measurements of two gene expressions (root and shoot respectively) from the fine scale time-series
-RNA-Seq of shoot and root responses to Nitrogen supply in Arabidopsis thaliana from the Gene Expression Omnibus." />
+<meta property="og:title" content="Pre-processed measurements of gene expressions of Arabidopsis thaliana — arabidopsis" />
+<meta property="og:description" content="A list containing datasets of gene expressions measured over time in the root and shoot of Arabidopsis thaliana respectively. These were pre-processed
+from the fine scale time-series RNA-Seq of shoot and root responses to Nitrogen supply in Arabidopsis thaliana from the Gene Expression Omnibus." />
 
 
 
@@ -106,25 +106,24 @@ RNA-Seq of shoot and root responses to Nitrogen supply in Arabidopsis thaliana f
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Raw measurements of two gene expressions of Arabidopsis thaliana</h1>
+    <h1>Pre-processed measurements of gene expressions of Arabidopsis thaliana</h1>
     <small class="dont-index">Source: <a href='https://github.com/SMAC-Group/irg/blob/master/R/data.R'><code>R/data.R</code></a></small>
-    <div class="hidden name"><code>raw_data.Rd</code></div>
+    <div class="hidden name"><code>arabidopsis.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A dataset containing three repeated measurements of two gene expressions (root and shoot respectively) from the fine scale time-series
-RNA-Seq of shoot and root responses to Nitrogen supply in Arabidopsis thaliana from the Gene Expression Omnibus.</p>
+    <p>A list containing datasets of gene expressions measured over time in the root and shoot of Arabidopsis thaliana respectively. These were pre-processed
+from the fine scale time-series RNA-Seq of shoot and root responses to Nitrogen supply in Arabidopsis thaliana from the Gene Expression Omnibus.</p>
     </div>
 
-    <pre class="usage"><span class='no'>raw_data</span></pre>
+    <pre class="usage"><span class='no'>arabidopsis</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A matrix with 30 rows and 3 columns (variables):</p><dl'>
-   <dt>root</dt><dd><p>expression in the root</p></dd>
-   <dt>shoot</dt><dd><p>expression in the shoot</p></dd>
-   <dt>time</dt><dd><p>time from the beginning of the experiment (in minutes) at which measurements were taken</p></dd>
+    <p>A list with 2 elements:</p><dl'>
+   <dt>roots</dt><dd><p>Data frame containing pre-processed gene expression measurements over time in the root (rows are different expressions and columns are measurement times)</p></dd>
+   <dt>shoot</dt><dd><p>Data frame containing pre-processed gene expression measurements over time in the shoot (rows are different expressions and columns are measurement times)</p></dd>
 
 </dl>
 

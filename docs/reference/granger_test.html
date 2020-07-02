@@ -123,7 +123,8 @@
   <span class='kw'>theta</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>alternative</span> <span class='kw'>=</span> <span class='st'>"twodir"</span>,
   <span class='kw'>H</span> <span class='kw'>=</span> <span class='fl'>100</span>,
-  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>,
+  <span class='kw'>showprogress</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -161,13 +162,18 @@ The default value is <code>"twodir"</code> which tests the alternative that "bot
       <th>seed</th>
       <td><p>A positive <code>integer</code> defining the seed value for the simulated signals throughout the parametric bootstrap procedure (default is <code>seed = 123</code>).</p></td>
     </tr>
+    <tr>
+      <th>showprogress</th>
+      <td><p>A <code>boolean</code> determining whether a progress-bar should be shown to update the user on the progress of the bootstrap procedure (defaults to <code>TRUE</code>).</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A <code>list</code> with the following objects:</p><dl'>
  <dt>alternative</dt><dd><p>The code of the alternative hypothesis that is tested.</p></dd>
- <dt>pvalue</dt><dd><p>The p-value computed using the bootstrap distribution.</p></dd>
+ <dt>stat</dt><dd><p>The test statistic used to perform the Granger-Causal test.</p></dd>
+ <dt>pvalue</dt><dd><p>The p-value computed using the bootstrap distribution under the null hypothesis.</p></dd>
  <dt>parameters</dt><dd><p>The parameters of "intensity" and "time of impact" for the alternative hypothesis that is tested.</p></dd>
 
 </dl>
@@ -179,9 +185,6 @@ According to the alternative hypothesis specified by the user, the function comp
 If the null hypothesis is rejected in favour of the alternative, then the user can obtain information on (i) how strong the impact of a signal on the other is and
 (ii) its direction (positive or negative) also referred to as "intensity" (represented by \(\psi\)) as well as the time point at which this impact is maximal
 also referred to as "impact time" (represented by \(\gamma\)).</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>XXX</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
