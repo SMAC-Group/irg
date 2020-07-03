@@ -144,7 +144,7 @@
 <div id="granger-causal-testing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#granger-causal-testing" class="anchor"></a>Granger-Causal Testing</h2>
-<p>Once the signals have been pre-processed, it is possible to make use of the <code>irg</code> package functions and for this we make use of the pre-processed signals made available in the other dataset made available in the package: <code>arabidopsis</code>.</p>
+<p>Once the signals have been pre-processed, it is possible to make use of the <code>irg</code> package functions and for this we make use of the pre-processed signals made available in the package: <code>arabidopsis</code>.</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">arabidopsis</span>)</pre></body></html></div>
 <p>This is a list containing two dataframes, for root (<code>$roots</code>) and shoot (<code>$shoots</code>) signals respectively, containing the gene expressions collected over the following time points: 0, 5, 10, 15, 20, 30, 45, 60, 90, 120 (in minutes). It can be noticed how the time intervals are irregular between measurements and therefore the <code>irg</code> package makes available a Granger-Causal testing framework for these specific settings.</p>
 <p>The main function of the package is the <code>granger_test</code> function. The null hypothesis for all tests that this function implements is the following:</p>
@@ -165,7 +165,15 @@
 <li>
 <code>"stor"</code>: “<span class="math inline">\(H_A\)</span>: the second signal (shoot) has a Granger-Causal impact on the first signal (root)”.</li>
 </ol>
-<p>The final arguments to the function concern the parametric bootstrap procedure used to generate the null distribution: - <code>H</code>: the number of bootstrap replicates. The larger this number is, the better the approximation of the null distribution but the slower the procedure will be to perform the test. - <code>seed</code>: the seed value used to generate the signals for the bootstrap distribution. A fixed seed allows to replicate the exact results of the test. - <code>showprogress</code>: a boolean parameter allowing to visualize (or not) a progress bar to update the user on the progress of the bootstrap procedure (particularly useful with large values of <code>H</code> and/or longer signals).</p>
+<p>The final arguments to the function concern the parametric bootstrap procedure used to generate the null distribution:</p>
+<ul>
+<li>
+<code>H</code>: the number of bootstrap replicates. The larger this number is, the better the approximation of the null distribution but the slower the procedure will be to perform the test.</li>
+<li>
+<code>seed</code>: the seed value used to generate the signals for the bootstrap distribution. A fixed seed allows to replicate the exact results of the test.</li>
+<li>
+<code>showprogress</code>: a boolean parameter allowing to visualize (or not) a progress bar to update the user on the progress of the bootstrap procedure (particularly useful with large values of <code>H</code> and/or longer signals).</li>
+</ul>
 <p>To perform this parametric bootstrap procedure, the <code>granger_test</code> uses the <code>sim_proc</code> function also made available by the <code>irg</code> package. Let us suppose that we want to simulate bivariate signals from the above mentioned model where only the second signal (shoot) has a Granger-Causal impact on the first and are measured at the same time points as the <code>arabidopsis</code> data also mentioned earlier. Then we could simulate this process as follows:</p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">theta_sim</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">0.99</span>, <span class="fl">10</span>, <span class="fl">0.01</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0.1</span>) <span class="co"># the parameter vector used to simulate data</span>
 <span class="no">times</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">15</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">45</span>, <span class="fl">60</span>, <span class="fl">90</span>, <span class="fl">120</span>) <span class="co"># the measurement time points</span>

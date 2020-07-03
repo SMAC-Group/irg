@@ -80,7 +80,7 @@ The result of the pre-processing is saved in the `signals` data made available w
 
 ## Granger-Causal Testing
 
-Once the signals have been pre-processed, it is possible to make use of the `irg` package functions and for this we make use of the pre-processed signals made available in the other dataset made available in the package: `arabidopsis`. 
+Once the signals have been pre-processed, it is possible to make use of the `irg` package functions and for this we make use of the pre-processed signals made available in the package: `arabidopsis`. 
 
 ```{r}
 data(arabidopsis)
@@ -118,9 +118,10 @@ The other possible alternative syntax is the following:
 2. `"stor"`: "$H_A$: the second signal (shoot) has a Granger-Causal impact on the first signal (root)".
 
 The final arguments to the function concern the parametric bootstrap procedure used to generate the null distribution:
-    - `H`: the number of bootstrap replicates. The larger this number is, the better the approximation of the null distribution but the slower the procedure will be to perform the test.
-    - `seed`: the seed value used to generate the signals for the bootstrap distribution. A fixed seed allows to replicate the exact results of the test.
-    - `showprogress`: a boolean parameter allowing to visualize (or not) a progress bar to update the user on the progress of the bootstrap procedure (particularly useful with large values of `H` and/or longer signals).
+
+- `H`: the number of bootstrap replicates. The larger this number is, the better the approximation of the null distribution but the slower the procedure will be to perform the test.
+- `seed`: the seed value used to generate the signals for the bootstrap distribution. A fixed seed allows to replicate the exact results of the test.
+- `showprogress`: a boolean parameter allowing to visualize (or not) a progress bar to update the user on the progress of the bootstrap procedure (particularly useful with large values of `H` and/or longer signals).
 
 To perform this parametric bootstrap procedure, the `granger_test` uses the `sim_proc` function also made available by the `irg` package. Let us suppose that we want to simulate bivariate signals from the above mentioned model where only the second signal (shoot) has a Granger-Causal impact on the first and are measured at the same time points as the `arabidopsis` data also mentioned earlier. Then we could simulate this process as follows:
 
