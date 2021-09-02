@@ -10,7 +10,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-The `irg` package is based on the procedure proposed in @Heerah2020. 
+The `irg` package is based on the procedure proposed in @heerah2021granger. 
 
 ```{r, message = FALSE, warning=FALSE}
 library(irg)
@@ -96,7 +96,7 @@ The goal of the function is to understand whether this null hypothesis can be re
 
 "$H_A$: The first signal (root) has a Granger-Causal impact on the second signal (shoot)".
 
-In order to perform this test of hypotheses, @Heerah2020 put forward a bivariate autoregressive model for irregularly sampled signals mainly characterized by the following parameter vector (other parameters not in this vector are implicitly defined in the function):
+In order to perform this test of hypotheses, @heerah2021granger put forward a bivariate autoregressive model for irregularly sampled signals mainly characterized by the following parameter vector (other parameters not in this vector are implicitly defined in the function):
 
 $$\theta := \big[\phi_{root},\, \psi_{root},\, \gamma_{root},\, \sigma_{root}^2,\, \phi_{shoot},\, \psi_{shoot},\, \gamma_{shoot},\, \sigma_{shoot}^2\big].$$
 The subscripts "root" and "shoot" underline how these parameters contribute to the behaviour over time of either the first signal (root) or second signal (shoot). While the $\phi$ and $\sigma^2$ parameters are specific to the dependence of a signal only on its own past (and represent the range of dependence on the past and the residual variance respectively), the main parameters of interest for the mentioned Granger-Causal testing framework are the $\psi$ and $\gamma$ parameters which represent the "intensity" and "time" of maximal (Granger-Causal) impact of one signal on the other. More specifically, $\psi \in (-1, 1)$ can be interpreted similarly to Pearson's correlation coefficient: the closer the value is to 1 (in absolute value) the greater is the impact of one signal on the other, while the sign represents the direction of the impact where, for example, a negative value implies that the impacted signal grows as the "causing" signal descreases (and viceversa). The $\gamma \in \mathbb{R}^+$ parameter instead represents the distance in time at which the impact of one signal on the other is maximal (under the assumption that the impact increases and then decreases monotonically over time). So, for example, $\psi_{root}$ represents the intensity of the impact of the shoot (second signal) on the root (first signal) while $\gamma_{root}$ represents the time required for the impact of the shoot on the root to be maximal.
@@ -148,7 +148,7 @@ We can see that the output of this function is a list with the following four el
 
 In this simulated example we see that, at a significance level of 0.01, we can reject the null hypothesis in favour of the alternative hypothesis (indeed, in this case we obtain the smallest p-value attainable given the value of `H`). Hence, having rejected the null hypothesis we can go and interpret the parameter values which, as can be seen, are very close to the true parameter values from which we simulated.
 
-Having seen the performance of the test in a controlled simulated setting, let us apply the test to two signals from the real data contained in `arabidopsis` and analysed in @Heerah2020. This time we (i) specify a starting value for the parameter vector, (ii) use a larger value of `H` for a better approximation of the null distribution and (iii) test the alternative hypothesis that the first signal (root) has a Granger-Causal impact on the second signal (shoot).
+Having seen the performance of the test in a controlled simulated setting, let us apply the test to two signals from the real data contained in `arabidopsis` and analysed in @heerah2021granger. This time we (i) specify a starting value for the parameter vector, (ii) use a larger value of `H` for a better approximation of the null distribution and (iii) test the alternative hypothesis that the first signal (root) has a Granger-Causal impact on the second signal (shoot).
 
 ```{r, cache = TRUE}
 root  <- arabidopsis$roots["AT4G27950", ]
@@ -163,5 +163,5 @@ Also in this case, the p-value is the smallest possible given the value of `H` a
 
 ## References
 
-This package is developed based on the work put forward in @Heerah2020.
+This package is developed based on the work put forward in @heerah2021granger.
 
