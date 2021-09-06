@@ -89,7 +89,7 @@ as well as on the simulated ones based on the sim_proc function (see Heerah et a
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/SMAC-Group/irg">
-    <span class="fa fa-github"></span>
+    <span class="fas fa-github"></span>
      
   </a>
 </li>
@@ -116,7 +116,7 @@ as well as on the simulated ones based on the sim_proc function (see Heerah et a
 as well as on the simulated ones based on the <code>sim_proc</code> function (see Heerah et al., 2020).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>causal_stat</span>(<span class='no'>root</span>, <span class='no'>shoot</span>, <span class='no'>times</span>, <span class='no'>theta</span>, <span class='kw'>alternative</span> <span class='kw'>=</span> <span class='st'>"twodir"</span>)</pre>
+    <pre class="usage"><span class='fu'>causal_stat</span><span class='op'>(</span><span class='va'>root</span>, <span class='va'>shoot</span>, <span class='va'>times</span>, <span class='va'>theta</span>, alternative <span class='op'>=</span> <span class='st'>"twodir"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,13 +148,16 @@ The default value is <code>"twodir"</code> which tests the alternative that "bot
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>list</code> containing the following objects:</p><dl'>
+    <p>A <code>list</code> containing the following objects:</p><dl>
  <dt>stat</dt><dd><p>The value of the Granger-Causal test statistic for the specified alternative hypothesis <code>HA</code></p></dd>
  <dt>parameters</dt><dd><p>A <code>double</code> vector containing the values of the parameters relevant for the specified alternative hypothesis <code>HA</code>
  (i.e. intensity of the causal impact (\(\psi\)) and the time of maximal impact (\(\gamma\)))</p></dd>
 
 </dl>
 
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Roberto Molinari and Stephane Guerrier</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -171,7 +174,7 @@ The default value is <code>"twodir"</code> which tests the alternative that "bot
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

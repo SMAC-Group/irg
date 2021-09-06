@@ -69,7 +69,7 @@ pre_process <- function(dat_mat) {
 }
 ```
 
-If we apply the ``pre_process` function to the raw signals we obtain the following:
+If we apply the `pre_process` function to the raw signals we obtain the following:
 
 ```{r}
 signals <- pre_process(raw_data)

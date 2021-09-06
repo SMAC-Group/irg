@@ -47,7 +47,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/SMAC-Group/irg">
-    <span class="fa fa-github"></span>
+    <span class="fas fa-github"></span>
      
   </a>
 </li>
@@ -75,15 +75,17 @@
 
     
     
-<p>The <code>irg</code> package is based on the procedure proposed in <span class="citation">Heerah et al. (2020)</span>.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">irg</span>)</pre></body></html></div>
+<p>The <code>irg</code> package is based on the procedure proposed in <span class="citation">Heerah et al. (2021)</span>.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/SMAC-Group/irg">irg</a></span><span class="op">)</span></code></pre></div>
 <p>The functions made available allow to perform Granger-Causal testing for signals that are sampled at the same but irregularly spaced time points. Before using the functions in the package, the signals need to be pre-processed such that they are detrended (mean-stationary) and standardized (normalized). Below we show some examples of possible ways of pre-processing the signals as well as how to use the main functions of the package.</p>
 <div id="data-pre-processing" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data-pre-processing" class="anchor"></a>Data Pre-Processing</h2>
 <p>In this section we use data that was collected during an experiment that measured the time-evolved transcriptome of the three replicates of Arabidopsis roots and shoots. The data <code>raw_data</code> contains a matrix reporting a gene expression count for root and shoot collected at the following time points: 0, 5, 10, 15, 20, 30, 45, 60, 90 and 120 (minutes).</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">raw_data</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">raw_data</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">raw_data</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">raw_data</span><span class="op">)</span></code></pre></div>
 <pre><code>##      root shoot time
 ## [1,] 4965   674    0
 ## [2,] 4776   714    0
@@ -92,46 +94,48 @@
 ## [5,] 3896   722    5
 ## [6,] 4441   578    5</code></pre>
 <p>We decide to use the following simple functions to pre-process the data in this matrix (but other pre-processing techniques can be chosen).</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">mgcv</span>)
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mgcv</span><span class="op">)</span>
 
 <span class="co"># Average signals at matching time points and then standardize</span>
-<span class="no">avg</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">signals</span>) {
+<span class="va">avg</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">signals</span><span class="op">)</span> <span class="op">{</span>
 
-  <span class="no">signal</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">NA</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">signals</span>)/<span class="fl">3</span>)
+  <span class="va">signal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">signals</span><span class="op">)</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span>
 
-  <span class="kw">for</span>(<span class="no">i</span> <span class="kw">in</span> <span class="fl">1</span>:(<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">signals</span>)/<span class="fl">3</span>)) {
+  <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">signals</span><span class="op">)</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
 
-    <span class="no">signal</span>[<span class="no">i</span>] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">signals</span>[(<span class="fl">3</span>*(<span class="no">i</span>-<span class="fl">1</span>) + <span class="fl">1</span>) : (<span class="fl">3</span>*<span class="no">i</span>)])
+    <span class="va">signal</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">signals</span><span class="op">[</span><span class="op">(</span><span class="fl">3</span><span class="op">*</span><span class="op">(</span><span class="va">i</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">:</span> <span class="op">(</span><span class="fl">3</span><span class="op">*</span><span class="va">i</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
 
-  }
+  <span class="op">}</span>
 
-  <span class="no">signal_std</span> <span class="kw">&lt;-</span> (<span class="no">signal</span> - <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">signal</span>))/<span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">signal</span>)
+  <span class="va">signal_std</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">signal</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">signal</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">signal</span><span class="op">)</span>
+  
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">signal_std</span><span class="op">)</span>
 
-  <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">signal_std</span>)
-
-}
+<span class="op">}</span>
 
 <span class="co"># Pre-processing function that uses GAM to detrend the signals and then uses previous function to aggregate and normalize</span>
-<span class="no">pre_process</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">dat_mat</span>) {
+<span class="va">pre_process</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">dat_mat</span><span class="op">)</span> <span class="op">{</span>
 
-  <span class="no">root</span> <span class="kw">&lt;-</span> <span class="no">dat_mat</span>[,<span class="fl">1</span>]
-  <span class="no">shoot</span> <span class="kw">&lt;-</span> <span class="no">dat_mat</span>[,<span class="fl">2</span>]
-  <span class="no">time</span> <span class="kw">&lt;-</span> <span class="no">dat_mat</span>[,<span class="fl">3</span>]
+  <span class="va">root</span> <span class="op">&lt;-</span> <span class="va">dat_mat</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>
+  <span class="va">shoot</span> <span class="op">&lt;-</span> <span class="va">dat_mat</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>
+  <span class="va">time</span> <span class="op">&lt;-</span> <span class="va">dat_mat</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span>
 
-  <span class="no">mod_root</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(<span class="no">root</span> ~ <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span>(<span class="no">time</span>))
-  <span class="no">mod_shoot</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span>(<span class="no">shoot</span> ~ <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span>(<span class="no">time</span>))
+  <span class="va">mod_root</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">root</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">mod_shoot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html">gam</a></span><span class="op">(</span><span class="va">shoot</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html">s</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span>
 
-  <span class="no">resid_root</span> <span class="kw">&lt;-</span> <span class="fu">avg</span>(<span class="fu"><a href="https://rdrr.io/r/stats/residuals.html">resid</a></span>(<span class="no">mod_root</span>))
-  <span class="no">resid_shoot</span> <span class="kw">&lt;-</span> <span class="fu">avg</span>(<span class="fu"><a href="https://rdrr.io/r/stats/residuals.html">resid</a></span>(<span class="no">mod_shoot</span>))
+  <span class="va">resid_root</span> <span class="op">&lt;-</span> <span class="fu">avg</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html">resid</a></span><span class="op">(</span><span class="va">mod_root</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">resid_shoot</span> <span class="op">&lt;-</span> <span class="fu">avg</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html">resid</a></span><span class="op">(</span><span class="va">mod_shoot</span><span class="op">)</span><span class="op">)</span>
 
-  <span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">root</span> <span class="kw">=</span> <span class="no">resid_root</span>, <span class="kw">shoot</span> <span class="kw">=</span> <span class="no">resid_shoot</span>)
+  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>root <span class="op">=</span> <span class="va">resid_root</span>, shoot <span class="op">=</span> <span class="va">resid_shoot</span><span class="op">)</span>
 
-  <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">out</span>)
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
 
-}</pre></body></html></div>
-<p>If we apply the `<code>pre_process</code> function to the raw signals we obtain the following:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">signals</span> <span class="kw">&lt;-</span> <span class="fu">pre_process</span>(<span class="no">raw_data</span>)
-<span class="no">signals</span></pre></body></html></div>
+<span class="op">}</span></code></pre></div>
+<p>If we apply the <code>pre_process</code> function to the raw signals we obtain the following:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">signals</span> <span class="op">&lt;-</span> <span class="fu">pre_process</span><span class="op">(</span><span class="va">raw_data</span><span class="op">)</span>
+<span class="va">signals</span></code></pre></div>
 <pre><code>## $root
 ##  [1]  1.71628640 -0.04956446 -1.59010074 -0.59163686 -0.79322148  0.73618577
 ##  [7]  0.14033187  1.08903416 -0.86743386  0.21011919
@@ -145,17 +149,19 @@
 <h2 class="hasAnchor">
 <a href="#granger-causal-testing" class="anchor"></a>Granger-Causal Testing</h2>
 <p>Once the signals have been pre-processed, it is possible to make use of the <code>irg</code> package functions and for this we make use of the pre-processed signals made available in the package: <code>arabidopsis</code>.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">arabidopsis</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">arabidopsis</span><span class="op">)</span></code></pre></div>
 <p>This is a list containing two dataframes, for root (<code>$roots</code>) and shoot (<code>$shoots</code>) signals respectively, containing the gene expressions collected over the following time points: 0, 5, 10, 15, 20, 30, 45, 60, 90, 120 (in minutes). It can be noticed how the time intervals are irregular between measurements and therefore the <code>irg</code> package makes available a Granger-Causal testing framework for these specific settings.</p>
 <p>The main function of the package is the <code>granger_test</code> function. The null hypothesis for all tests that this function implements is the following:</p>
 <p>“<span class="math inline">\(H_0\)</span>: The two signals have no Granger-Causal impact on each other”.</p>
 <p>The goal of the function is to understand whether this null hypothesis can be rejected in favour of a specific alternative hypothesis, an example of which is given by:</p>
 <p>“<span class="math inline">\(H_A\)</span>: The first signal (root) has a Granger-Causal impact on the second signal (shoot)”.</p>
-<p>In order to perform this test of hypotheses, <span class="citation">Heerah et al. (2020)</span> put forward a bivariate autoregressive model for irregularly sampled signals mainly characterized by the following parameter vector (other parameters not in this vector are implicitly defined in the function):</p>
+<p>In order to perform this test of hypotheses, <span class="citation">Heerah et al. (2021)</span> put forward a bivariate autoregressive model for irregularly sampled signals mainly characterized by the following parameter vector (other parameters not in this vector are implicitly defined in the function):</p>
 <p><span class="math display">\[\theta := \big[\phi_{root},\, \psi_{root},\, \gamma_{root},\, \sigma_{root}^2,\, \phi_{shoot},\, \psi_{shoot},\, \gamma_{shoot},\, \sigma_{shoot}^2\big].\]</span> The subscripts “root” and “shoot” underline how these parameters contribute to the behaviour over time of either the first signal (root) or second signal (shoot). While the <span class="math inline">\(\phi\)</span> and <span class="math inline">\(\sigma^2\)</span> parameters are specific to the dependence of a signal only on its own past (and represent the range of dependence on the past and the residual variance respectively), the main parameters of interest for the mentioned Granger-Causal testing framework are the <span class="math inline">\(\psi\)</span> and <span class="math inline">\(\gamma\)</span> parameters which represent the “intensity” and “time” of maximal (Granger-Causal) impact of one signal on the other. More specifically, <span class="math inline">\(\psi \in (-1, 1)\)</span> can be interpreted similarly to Pearson’s correlation coefficient: the closer the value is to 1 (in absolute value) the greater is the impact of one signal on the other, while the sign represents the direction of the impact where, for example, a negative value implies that the impacted signal grows as the “causing” signal descreases (and viceversa). The <span class="math inline">\(\gamma \in \mathbb{R}^+\)</span> parameter instead represents the distance in time at which the impact of one signal on the other is maximal (under the assumption that the impact increases and then decreases monotonically over time). So, for example, <span class="math inline">\(\psi_{root}\)</span> represents the intensity of the impact of the shoot (second signal) on the root (first signal) while <span class="math inline">\(\gamma_{root}\)</span> represents the time required for the impact of the shoot on the root to be maximal.</p>
 <p>Estimating the parameters of these models via maximum-likelihood (under a Gaussian assumption), it is then possible to perform a Likelihood Ratio Test (LRT) to understand if the model under the alternative hypothesis significantly improves the fit of the signals. Given the short length of signals usually measured in biological experiments, the LRT test is performed using parametric bootstrap to approximate the small sample distribution under the null hypothesis. This procedure is performed by the <code>granger_test</code> function whose syntax is given below:</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="../reference/granger_test.html">granger_test</a></span>(<span class="no">root</span>, <span class="no">shoot</span>, <span class="no">times</span>, <span class="kw">theta</span> <span class="kw">=</span> <span class="kw">NULL</span>, <span class="kw">alternative</span> <span class="kw">=</span> <span class="st">"twodir"</span>,
-             <span class="kw">H</span> <span class="kw">=</span> <span class="fl">100</span>, <span class="kw">seed</span> <span class="kw">=</span> <span class="fl">123</span>, <span class="kw">showprogress</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/granger_test.html">granger_test</a></span><span class="op">(</span><span class="va">root</span>, <span class="va">shoot</span>, <span class="va">times</span>, theta <span class="op">=</span> <span class="cn">NULL</span>, alternative <span class="op">=</span> <span class="st">"twodir"</span>, 
+             H <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">123</span>, showprogress <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>The first two arguments are the first (<code>root</code>) and second (<code>shoot</code>) signals for which we want to test a Granger-Causal relationship. The <code>times</code> argument is the numeric vector containing the time points at which the measurements were taken (in the same unit of time) while <code>theta</code> represents numeric vector (of length 8) containing the starting values for the parameter vector <span class="math inline">\(\theta\)</span> described earlier (if left empty, the starting values will be estimated by the function itself). The <code>alternative</code> argument represents the alternative hypothesis we’re interested in testing: by default we have <code>alternative = "twodir"</code> which indicates that we’re testing the alternative hypothesis:</p>
 <p>“<span class="math inline">\(H_A\)</span>: The two signals have a Granger-Causal impact on each other”.</p>
 <p>The other possible alternative syntax is the following:</p>
@@ -175,13 +181,15 @@
 <code>showprogress</code>: a boolean parameter allowing to visualize (or not) a progress bar to update the user on the progress of the bootstrap procedure (particularly useful with large values of <code>H</code> and/or longer signals).</li>
 </ul>
 <p>To perform this parametric bootstrap procedure, the <code>granger_test</code> uses the <code>sim_proc</code> function also made available by the <code>irg</code> package. Let us suppose that we want to simulate bivariate signals from the above mentioned model where only the second signal (shoot) has a Granger-Causal impact on the first and are measured at the same time points as the <code>arabidopsis</code> data also mentioned earlier. Then we could simulate this process as follows:</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">theta_sim</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">0.99</span>, <span class="fl">10</span>, <span class="fl">0.01</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0.1</span>) <span class="co"># the parameter vector used to simulate data</span>
-<span class="no">times</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">15</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">45</span>, <span class="fl">60</span>, <span class="fl">90</span>, <span class="fl">120</span>) <span class="co"># the measurement time points</span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">theta_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.99</span>, <span class="fl">10</span>, <span class="fl">0.01</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0.1</span><span class="op">)</span> <span class="co"># the parameter vector used to simulate data</span>
+<span class="va">times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">15</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">45</span>, <span class="fl">60</span>, <span class="fl">90</span>, <span class="fl">120</span><span class="op">)</span> <span class="co"># the measurement time points</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">223</span>) <span class="co"># set seed for example replicability</span>
-<span class="no">sim</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/sim_proc.html">sim_proc</a></span>(<span class="no">theta_sim</span>, <span class="no">times</span>) <span class="co"># simulate the bivariate time series</span></pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">223</span><span class="op">)</span> <span class="co"># set seed for example replicability</span>
+<span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_proc.html">sim_proc</a></span><span class="op">(</span><span class="va">theta_sim</span>, <span class="va">times</span><span class="op">)</span> <span class="co"># simulate the bivariate time series</span></code></pre></div>
 <p>It can be noticed how the values for <span class="math inline">\(\psi_{shoot}\)</span> and <span class="math inline">\(\gamma_{shoot}\)</span> are zero, indicating that the first signal (root) has no impact on the second (shoot). The object <code>sim</code> is a list containing the simulated values for the first signal (<code>$root</code>) and second signal (<code>$shoot</code>) and can now be used within the <code>granger_test</code> function as follows:</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="../reference/granger_test.html">granger_test</a></span>(<span class="kw">root</span> <span class="kw">=</span> <span class="no">sim</span>$<span class="no">root</span>, <span class="kw">shoot</span> <span class="kw">=</span> <span class="no">sim</span>$<span class="no">shoot</span>, <span class="kw">times</span> <span class="kw">=</span> <span class="no">times</span>, <span class="kw">alternative</span> <span class="kw">=</span> <span class="st">"stor"</span>, <span class="kw">H</span> <span class="kw">=</span> <span class="fl">100</span>, <span class="kw">showprogress</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/granger_test.html">granger_test</a></span><span class="op">(</span>root <span class="op">=</span> <span class="va">sim</span><span class="op">$</span><span class="va">root</span>, shoot <span class="op">=</span> <span class="va">sim</span><span class="op">$</span><span class="va">shoot</span>, times <span class="op">=</span> <span class="va">times</span>, alternative <span class="op">=</span> <span class="st">"stor"</span>, H <span class="op">=</span> <span class="fl">100</span>, showprogress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <pre><code>## $alternative
 ## [1] "stor"
 ## 
@@ -206,12 +214,13 @@
 <code>parameters</code>: the values of the parameters of interest for the specific alternative hypothesis (i.e. the <span class="math inline">\(\psi\)</span> and <span class="math inline">\(\gamma\)</span> parameters).</li>
 </ol>
 <p>In this simulated example we see that, at a significance level of 0.01, we can reject the null hypothesis in favour of the alternative hypothesis (indeed, in this case we obtain the smallest p-value attainable given the value of <code>H</code>). Hence, having rejected the null hypothesis we can go and interpret the parameter values which, as can be seen, are very close to the true parameter values from which we simulated.</p>
-<p>Having seen the performance of the test in a controlled simulated setting, let us apply the test to two signals from the real data contained in <code>arabidopsis</code> and analysed in <span class="citation">Heerah et al. (2020)</span>. This time we (i) specify a starting value for the parameter vector, (ii) use a larger value of <code>H</code> for a better approximation of the null distribution and (iii) test the alternative hypothesis that the first signal (root) has a Granger-Causal impact on the second signal (shoot).</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">root</span>  <span class="kw">&lt;-</span> <span class="no">arabidopsis</span>$<span class="no">roots</span>[<span class="st">"AT4G27950"</span>, ]
-<span class="no">shoot</span> <span class="kw">&lt;-</span> <span class="no">arabidopsis</span>$<span class="no">shoots</span>[<span class="st">"AT4G34750"</span>, ]
-<span class="no">theta_start</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">0.5</span>, <span class="fl">10</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0.5</span>, <span class="fl">10</span>, <span class="fl">1</span>) <span class="co"># starting values for parameter vector</span>
+<p>Having seen the performance of the test in a controlled simulated setting, let us apply the test to two signals from the real data contained in <code>arabidopsis</code> and analysed in <span class="citation">Heerah et al. (2021)</span>. This time we (i) specify a starting value for the parameter vector, (ii) use a larger value of <code>H</code> for a better approximation of the null distribution and (iii) test the alternative hypothesis that the first signal (root) has a Granger-Causal impact on the second signal (shoot).</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">root</span>  <span class="op">&lt;-</span> <span class="va">arabidopsis</span><span class="op">$</span><span class="va">roots</span><span class="op">[</span><span class="st">"AT4G27950"</span>, <span class="op">]</span>
+<span class="va">shoot</span> <span class="op">&lt;-</span> <span class="va">arabidopsis</span><span class="op">$</span><span class="va">shoots</span><span class="op">[</span><span class="st">"AT4G34750"</span>, <span class="op">]</span>
+<span class="va">theta_start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.5</span>, <span class="fl">10</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0.5</span>, <span class="fl">10</span>, <span class="fl">1</span><span class="op">)</span> <span class="co"># starting values for parameter vector</span>
 
-<span class="fu"><a href="../reference/granger_test.html">granger_test</a></span>(<span class="no">root</span>, <span class="no">shoot</span>, <span class="kw">times</span> <span class="kw">=</span> <span class="no">times</span>, <span class="kw">theta</span> <span class="kw">=</span> <span class="no">theta_start</span>, <span class="kw">alternative</span> <span class="kw">=</span> <span class="st">"rtos"</span>, <span class="kw">H</span> <span class="kw">=</span> <span class="fl">1000</span>, <span class="kw">showprogress</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
+<span class="fu"><a href="../reference/granger_test.html">granger_test</a></span><span class="op">(</span><span class="va">root</span>, <span class="va">shoot</span>, times <span class="op">=</span> <span class="va">times</span>, theta <span class="op">=</span> <span class="va">theta_start</span>, alternative <span class="op">=</span> <span class="st">"rtos"</span>, H <span class="op">=</span> <span class="fl">1000</span>, showprogress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <pre><code>## $alternative
 ## [1] "rtos"
 ## 
@@ -229,10 +238,10 @@
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h2>
-<p>This package is developed based on the work put forward in <span class="citation">Heerah et al. (2020)</span>.</p>
+<p>This package is developed based on the work put forward in <span class="citation">Heerah et al. (2021)</span>.</p>
 <div id="refs" class="references">
-<div id="ref-Heerah2020">
-<p>Heerah, Sachin, Roberto Molinari, Stéphane Guerrier, and Amy Marshall-Colon. 2020. “Granger-Causal Testing for Irregularly Sampled Time Series with Application to Nitrogen Signaling in Arabidopsis.” <em>bioRxiv</em>. <a href="https://doi.org/10.1101/2020.06.15.152819">https://doi.org/10.1101/2020.06.15.152819</a>.</p>
+<div id="ref-heerah2021granger">
+<p>Heerah, Sachin, Roberto Molinari, Stéphane Guerrier, and Amy Marshall-Colon. 2021. “Granger-Causal Testing for Irregularly Sampled Time Series with Application to Nitrogen Signalling in Arabidopsis.” <em>Bioinformatics</em> 37 (16): 2450–60.</p>
 </div>
 </div>
 </div>
@@ -253,7 +262,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
